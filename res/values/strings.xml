@@ -1,0 +1,11 @@
+<resources>
+    
+    <string name="app_name">Radio</string>
+    <string name="title_activity_radio">Radio.RU</string>
+    <string name="crash_toast_text">Ой! Что то пошло не по плану! Но Вы не беспокойтесь я разберусь))</string>
+    <string name="menu_exit">ВЫХОД</string>
+    <string name="menu_task">СВЕРНУТЬ</string>
+    <string name="menu_chanel">КАНАЛЫ</string>
+    <string name="ver">ver. 3.0.1</string>
+    
+</resources>
