@@ -2,7 +2,18 @@ package dfh.chelaxe.radio;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.Notification;
@@ -39,6 +50,9 @@ public class Radio extends Activity
 	private int flag = 0;
 	private String CHANEL = "chanel";	
 	private ProgressBar pBChanel;
+	private ApMy myApp;
+	private ClockTask cTask;
+	private TextView TextClock;
 	private ImageButton iBPlay;
 	private String RUri;
 	private PendingIntent pi;		
@@ -71,6 +85,28 @@ public class Radio extends Activity
 			R.drawable.ic_launcher, R.drawable.ic_launcher
 			};	
 	
+	private String Padejg(int n)
+	{
+		String str = "";
+		
+		int nmod10 = n%10;
+
+		if((n == 1) || (nmod10 == 1))
+		{
+			str = "Всего: " + n + " час.";
+		}
+		else if((n > 1) && (n < 5) || ((nmod10 >= 2) && (nmod10 <= 4)))
+		{
+			str = "Всего: " + n + " часа.";
+		}
+		else
+		{
+			str = "Всего: " + n + " часов.";		
+		}
+		
+	    return str;
+	}
+	
     @Override
     public boolean onCreateOptionsMenu(Menu menu) 
     {
@@ -93,6 +129,12 @@ public class Radio extends Activity
     			return super.onOptionsItemSelected(item);
     	}
     	return true;
+    }
+    
+    
+    public void mClick(View vw)
+    {
+    	openOptionsMenu();
     }
     
     public void pClick(View vw)
@@ -144,12 +186,22 @@ public class Radio extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) 
     {
-    	Log.d("RADIO", "ChelInfo: Create Activity");
+    	myApp = (ApMy) getApplicationContext();
+    	
+    	Log.d(myApp.LOGKEY(), "ChelInfo: Create Activity");
     	
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_radio);
         
-        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);        
+        if(!(myApp.GetClock().length > 0))
+        {
+        	cTask = new ClockTask();
+            cTask.execute(0);
+        }
+        
+        
+        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        TextClock = (TextView) findViewById(R.id.textclock);
         pBChanel = (ProgressBar) findViewById(R.id.pBChanel);
         iBPlay = (ImageButton) findViewById(R.id.iBPlay);
              
@@ -416,6 +468,11 @@ public class Radio extends Activity
 					    	startService(new Intent(mapp, RService.class).putExtra("Player", RUri).putExtra("pendingIntent", pi));
 							break;
 					}
+
+			    	if(myApp.GetClock().length > 0)
+			    	{			    		
+			    		TextClock.setText(Padejg(Integer.parseInt(myApp.GetClock()[selectedItemPosition])));
+			    	}
 				}
 
 				public void onNothingSelected(AdapterView<?> parent) 
@@ -429,7 +486,7 @@ public class Radio extends Activity
     @Override
     protected void onPause()
     {
-    	Log.d("RADIO", "ChelInfo: Pause Activity");
+    	Log.d(myApp.LOGKEY(), "ChelInfo: Pause Activity");
     	
     	super.onPause();  
     	
@@ -492,4 +549,61 @@ public class Radio extends Activity
 			return convertView;
 		}
 	}
+    
+	class ClockTask extends AsyncTask<Integer, Integer, String>
+	{
+		@Override
+		protected String doInBackground(Integer... integ)
+		{
+			try 
+			{
+	    	    HttpClient client = new DefaultHttpClient();  
+	    	    String getURL = "http://46.45.14.1/cgi-bin/radio.cgi";
+	    	    HttpGet get = new HttpGet(getURL);
+	    	    HttpResponse responseGet = client.execute(get);  
+	    	    HttpEntity resEntityGet = responseGet.getEntity();  
+	    	    if (resEntityGet != null) 
+	    	    {
+	    	        String responses = EntityUtils.toString(resEntityGet);      
+	    	        try 
+	    	        {
+	    				JSONObject jsonObject = new JSONObject(responses);
+	    				String CannelClocks[] = new String[] { 
+	    						jsonObject.getString("piano"), 
+	    						jsonObject.getString("opera"), 
+	    						jsonObject.getString("jazz"), 
+	    						jsonObject.getString("trance"), 
+	    						jsonObject.getString("fashion"), 
+	    						jsonObject.getString("minimal"), 
+	    						jsonObject.getString("relax"), 
+	    						jsonObject.getString("house"), 
+	    						jsonObject.getString("dnb"), 
+	    						jsonObject.getString("dub"), 
+	    						jsonObject.getString("unformat")
+	    			    		};
+	    				
+	    				myApp.SetClock(CannelClocks);
+	    			} 
+	    	        catch (JSONException e) 
+	    	        {
+	    				Log.d(myApp.LOGKEY(), "ChelError: " + e.getMessage());
+	    			}
+	    	    }
+	    	} 
+			catch (Exception e) 
+			{
+	    		Log.d(myApp.LOGKEY(), "ChelError: " + e.getMessage());
+	    	}
+			
+			return "ok";
+		}
+		@Override
+		protected void onPostExecute(String result) 
+		{
+	    	if(myApp.GetClock().length > 0)
+	    	{	    		
+	    		TextClock.setText(Padejg(Integer.parseInt(myApp.GetClock()[spinner.getSelectedItemPosition()])));
+	    	}
+		}
+	}	
 }

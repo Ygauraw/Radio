@@ -13,26 +13,28 @@ public final class R {
     public static final class drawable {
         public static final int ic_launcher=0x7f020000;
         public static final int jazz=0x7f020001;
-        public static final int pause=0x7f020002;
-        public static final int piano=0x7f020003;
-        public static final int play=0x7f020004;
-        public static final int radiologo=0x7f020005;
+        public static final int menu=0x7f020002;
+        public static final int pause=0x7f020003;
+        public static final int piano=0x7f020004;
+        public static final int play=0x7f020005;
+        public static final int radiologo=0x7f020006;
     }
     public static final class id {
         public static final int RLayout=0x7f070000;
-        public static final int chanelimage=0x7f070006;
-        public static final int chhanelautor=0x7f070008;
-        public static final int chhanelname=0x7f070007;
+        public static final int chanelimage=0x7f070007;
+        public static final int chhanelautor=0x7f070009;
+        public static final int chhanelname=0x7f070008;
         public static final int iBPlay=0x7f070002;
         public static final int iVChanel=0x7f070001;
-        public static final int menu_exit=0x7f07000d;
-        public static final int menu_task=0x7f07000c;
-        public static final int notchanel=0x7f07000b;
-        public static final int notimage=0x7f070009;
-        public static final int notradio=0x7f07000a;
+        public static final int imageButton1=0x7f070006;
+        public static final int menu_exit=0x7f07000e;
+        public static final int menu_task=0x7f07000d;
+        public static final int notchanel=0x7f07000c;
+        public static final int notimage=0x7f07000a;
+        public static final int notradio=0x7f07000b;
         public static final int pBChanel=0x7f070003;
         public static final int sPChanel=0x7f070004;
-        public static final int ver=0x7f070005;
+        public static final int textclock=0x7f070005;
     }
     public static final class layout {
         public static final int activity_radio=0x7f030000;
@@ -49,7 +51,6 @@ public final class R {
         public static final int menu_exit=0x7f040003;
         public static final int menu_task=0x7f040004;
         public static final int title_activity_radio=0x7f040001;
-        public static final int ver=0x7f040006;
     }
     public static final class style {
         public static final int AppBaseTheme=0x7f050000;

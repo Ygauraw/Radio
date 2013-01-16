@@ -20,20 +20,16 @@ public class RService extends Service
 	private PendingIntent pi;
 	private BroadcastReceiver receiver;
 	
-    @Override 
-    public IBinder onBind(Intent intent) 
-	{ 
-    	Log.d("RADIO", "ChelInfo: Bind Service");
-    	
-        return null; 
-    } 
+	private ApMy myApp;
 
 	@Override 
     public void onCreate() 
 	{
-		Log.d("RADIO", "ChelInfo: Create Service");
+		myApp = (ApMy) getApplicationContext();
+		Log.d(myApp.LOGKEY(), "ChelInfo: Create Service");
 		
 		super.onCreate();
+		
 		mPlayer = new MediaPlayer();
 		
 		receiver = new BroadcastReceiver() 
@@ -69,10 +65,18 @@ public class RService extends Service
 		registerReceiver(receiver, new IntentFilter("android.intent.action.PHONE_STATE"));	
     } 
 	
+    @Override 
+    public IBinder onBind(Intent intent) 
+	{ 
+    	Log.d(myApp.LOGKEY(), "ChelInfo: Bind Service");
+    	
+        return null; 
+    } 
+	
 	@Override 
     public void onStart(final Intent intent, int startid) 
 	{
-		Log.d("RADIO", "ChelInfo: Start Service");
+		Log.d(myApp.LOGKEY(), "ChelInfo: Start Service");
 		
 		pi = intent.getParcelableExtra("pendingIntent");    	
 		
@@ -81,7 +85,7 @@ public class RService extends Service
     		try {
     			pi.send(300);
     		} catch (CanceledException e) {
-    			Log.d("RADIO", "ChelError: " + e.getMessage());
+    			Log.d(myApp.LOGKEY(), "ChelError: " + e.getMessage());
     		}
 		} else if(intent.getStringExtra("Player").equalsIgnoreCase("play")) 
 		{
@@ -89,7 +93,7 @@ public class RService extends Service
     		try {
     			pi.send(400);
     		} catch (CanceledException e) {
-    			Log.d("RADIO", "ChelError: " + e.getMessage());
+    			Log.d(myApp.LOGKEY(), "ChelError: " + e.getMessage());
     		}
 		} else
 		{		
@@ -105,14 +109,14 @@ public class RService extends Service
 	            		mPlayer.prepare();
 					} catch (Exception e) 
 					{
-						Log.d("RADIO", "ChelError: " + e.getMessage());
+						Log.d(myApp.LOGKEY(), "ChelError: " + e.getMessage());
 					}
 	            	mPlayer.start(); 
 	            	
 	        		try {
 	        			pi.send(100);
 	        		} catch (CanceledException e) {
-	        			Log.d("RADIO", "ChelError: " + e.getMessage());
+	        			Log.d(myApp.LOGKEY(), "ChelError: " + e.getMessage());
 	        		}
 	            }
 	        }).start();		
@@ -122,12 +126,12 @@ public class RService extends Service
     @Override 
     public void onDestroy() 
 	{
-    	Log.d("RADIO", "ChelInfo: Destroy Service");
+    	Log.d(myApp.LOGKEY(), "ChelInfo: Destroy Service");
     	
     	try {
 			pi.send(200);
 		} catch (CanceledException e) {
-			Log.d("RADIO", "ChelError: " + e.getMessage());
+			Log.d(myApp.LOGKEY(), "ChelError: " + e.getMessage());
 		}
     	unregisterReceiver(receiver);
     	mPlayer.stop();

@@ -46,12 +46,23 @@
         android:layout_alignParentTop="true" />
 
     <TextView
-        android:id="@+id/ver"
+        android:id="@+id/textclock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:textColor="#fff"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <ImageButton
+        android:id="@+id/imageButton1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:text="@string/ver"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/title_activity_radio"
+        android:onClick="mClick"
+        android:src="@drawable/menu" />
 
 </RelativeLayout>

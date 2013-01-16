@@ -13,10 +13,31 @@ import android.app.Application;
 
 public class ApMy extends Application
 {	
+	private String logkey = "RADIO";
+	
+	public String LOGKEY()
+	{
+		return this.logkey;
+	}
+	
+	private String[] clock;
+	
+	public String[] GetClock()
+	{
+		return this.clock;
+	}
+	
+	public void SetClock(String[] clocks)
+	{
+		this.clock = clocks;
+	}
+	
 	@Override
 	public void onCreate() 
 	{
 		super.onCreate();
-		ACRA.init(this);		
+		ACRA.init(this);	
+		
+		this.clock = new String[]{};
 	}
 }
